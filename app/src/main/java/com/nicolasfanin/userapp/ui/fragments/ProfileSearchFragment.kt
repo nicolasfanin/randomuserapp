@@ -2,15 +2,26 @@ package com.nicolasfanin.userapp.ui.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.*
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
+import com.nicolasfanin.userapp.ui.adapters.UserAdapter
+import com.nicolasfanin.userapp.ui.data.User
+import kotlinx.android.synthetic.main.fragment_profile_search.*
 
 class ProfileSearchFragment : Fragment() {
+
+
+    private val userList = listOf(
+        User("M", "Nicolas", "Fanin", ""),
+        User("F", "Marilu", "Ottolini", ""),
+        User("F", "Candela", "Fanin Ottolini", "")
+    )
+
 
     companion object {
         fun newInstance(): ProfileSearchFragment {
@@ -24,9 +35,18 @@ class ProfileSearchFragment : Fragment() {
         var searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(searchToolbar)
 
-
         setHasOptionsMenu(true)
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        user_recycler_view.apply {
+            layoutManager = LinearLayoutManager(activity)
+
+            adapter = UserAdapter(userList)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
