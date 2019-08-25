@@ -6,22 +6,24 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.*
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
 import com.nicolasfanin.userapp.ui.adapters.UserAdapter
-import com.nicolasfanin.userapp.ui.data.User
+import com.nicolasfanin.userapp.ui.data.UserRepositoryProvider
+import com.nicolasfanin.userapp.ui.data.model.User
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_profile_search.*
 
 class ProfileSearchFragment : Fragment() {
 
-
-    private val userList = listOf(
-        User("M", "Nicolas", "Fanin", ""),
-        User("F", "Marilu", "Ottolini", ""),
-        User("F", "Candela", "Fanin Ottolini", "")
+    private var userList = listOf(
+        User("M", "Nicolas", "Fanin"),
+        User("F", "Marilu", "Ottolini"),
+        User("F", "Candela", "Fanin Ottolini")
     )
-
 
     companion object {
         fun newInstance(): ProfileSearchFragment {
@@ -32,6 +34,20 @@ class ProfileSearchFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.fragment_profile_search, container, false)
 
+        val repository = UserRepositoryProvider.provideUserRepository()
+
+        repository.getUsers()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe ({
+                    result ->
+                Log.d("Result", "There are ${result.results.get(0)} Java developers in Lagos")
+                userList = result.results
+                updateUi()
+            }, { error ->
+                error.printStackTrace()
+            })
+
         var searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(searchToolbar)
 
@@ -41,10 +57,11 @@ class ProfileSearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
 
+    fun updateUi() {
         user_recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
-
             adapter = UserAdapter(userList)
         }
     }
