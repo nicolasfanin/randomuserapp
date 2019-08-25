@@ -19,11 +19,7 @@ import kotlinx.android.synthetic.main.fragment_profile_search.*
 
 class ProfileSearchFragment : Fragment() {
 
-    private var userList = listOf(
-        User("M", "Nicolas", "Fanin"),
-        User("F", "Marilu", "Ottolini"),
-        User("F", "Candela", "Fanin Ottolini")
-    )
+    private lateinit var userList: List<User>
 
     companion object {
         fun newInstance(): ProfileSearchFragment {
@@ -34,6 +30,19 @@ class ProfileSearchFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.fragment_profile_search, container, false)
 
+        var searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(searchToolbar)
+
+        setHasOptionsMenu(true)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadData()
+    }
+
+    private fun loadData() {
         val repository = UserRepositoryProvider.provideUserRepository()
 
         repository.getUsers()
@@ -47,19 +56,9 @@ class ProfileSearchFragment : Fragment() {
             }, { error ->
                 error.printStackTrace()
             })
-
-        var searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
-        (activity as AppCompatActivity).setSupportActionBar(searchToolbar)
-
-        setHasOptionsMenu(true)
-        return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    fun updateUi() {
+    private fun updateUi() {
         user_recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = UserAdapter(userList)

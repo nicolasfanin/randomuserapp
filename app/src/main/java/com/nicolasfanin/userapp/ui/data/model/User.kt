@@ -4,8 +4,21 @@ import com.google.gson.annotations.SerializedName
 
 data class User (
     @SerializedName("gender") val gender: String? = "no gender",
-    @SerializedName("first") val first: String? = "no name",
-    @SerializedName("last") val last: String? = "no name"
+    @SerializedName("name") val name: Name?,
+    @SerializedName("email") val first: String? = "no email",
+    @SerializedName("picture") val picture: Picture?
     )
+
+data class Name (
+    @SerializedName("title") val title: String? = "no title name",
+    @SerializedName("first") val first: String? = "no first name",
+    @SerializedName("last") val last: String? = "no last name"
+)
+
+data class Picture (
+    @SerializedName("large") val large: String? = "no large image",
+    @SerializedName("medium") val medium: String? = "no medium image",
+    @SerializedName("thumbnail") val thumbnail: String? = "no thumbnail image"
+)
 
 data class Result(val results: List<User>)

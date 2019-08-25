@@ -3,8 +3,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="20dp"
+                android:layout_marginLeft="@dimen/row_padding"
+                android:layout_marginRight="@dimen/row_padding"
                 xmlns:tools="http://schemas.android.com/tools">
-    <View
+    <ImageView
             android:id="@+id/avatar_view"
             android:layout_width="55dp"
             android:layout_height="55dp"
