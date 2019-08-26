@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
 import com.nicolasfanin.userapp.ui.adapters.UserAdapter
@@ -19,19 +21,23 @@ import kotlinx.android.synthetic.main.fragment_profile_search.*
 
 class ProfileSearchFragment : Fragment() {
 
-    private lateinit var userList: List<User>
-
     companion object {
         fun newInstance(): ProfileSearchFragment {
             return ProfileSearchFragment()
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = inflater.inflate(R.layout.fragment_profile_search, container, false)
+    private lateinit var listener: ProfileSearchListener
+    private lateinit var userRecyclerView: RecyclerView
+    private lateinit var userList: List<User>
 
-        var searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_profile_search, container, false)
+
+        val searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(searchToolbar)
+
+        userRecyclerView = view.findViewById(R.id.user_recycler_view)
 
         setHasOptionsMenu(true)
         return view
@@ -39,17 +45,18 @@ class ProfileSearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        listener = (activity as ProfileSearchListener)
         loadData()
     }
 
+    //TODO: this should be placed in a FragmentPresenter
     private fun loadData() {
         val repository = UserRepositoryProvider.provideUserRepository()
 
         repository.getUsers()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe ({
-                    result ->
+            .subscribe({ result ->
                 Log.d("Result", "There are ${result.results.get(0)} Java developers in Lagos")
                 userList = result.results
                 updateUi()
@@ -59,9 +66,15 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private fun updateUi() {
-        user_recycler_view.apply {
+        val itemOnClick: (Int) -> Unit = { position ->
+            userRecyclerView.adapter!!.notifyDataSetChanged()
+            Toast.makeText(this.context,"$position. item clicked.",Toast.LENGTH_SHORT).show()
+            listener.navigateToProfileDetails(userList.get(position))
+        }
+
+        userRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = UserAdapter(userList)
+            adapter = UserAdapter(userList, itemOnClick)
         }
     }
 
@@ -74,5 +87,11 @@ class ProfileSearchFragment : Fragment() {
             setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW or MenuItem.SHOW_AS_ACTION_IF_ROOM)
             actionView = searchView
         }
+    }
+
+    interface ProfileSearchListener {
+
+        fun navigateToProfileDetails(user: User)
+
     }
 }

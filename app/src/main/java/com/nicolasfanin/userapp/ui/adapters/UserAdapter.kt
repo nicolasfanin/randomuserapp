@@ -2,6 +2,7 @@ package com.nicolasfanin.userapp.ui.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.nicolasfanin.userapp.R
@@ -9,15 +10,11 @@ import com.nicolasfanin.userapp.ui.data.model.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.user_item.view.*
 
-class UserAdapter(private val userList: List<User>) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter(private val userList: List<User>, private val listener: (Int) -> Unit) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val user: User = userList[position]
-        holder.bind(user)
-
-        Picasso.get()
-            .load(user.picture!!.thumbnail)
-            .into(holder.itemView.avatar_view)
+        holder.bind(user,listener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
@@ -38,9 +35,15 @@ class UserAdapter(private val userList: List<User>) : RecyclerView.Adapter<UserA
             subtitleTextView = itemView.findViewById(R.id.subtitle_text_view)
         }
 
-        fun bind(user: User) {
-            userNameTextView?.text = """${user.name!!.title} ${user.name!!.first} ${user.name!!.last}"""
+        fun bind(user: User, itemClickListener:(Int)->Unit) {
+            userNameTextView?.text = """${user.name!!.title} ${user.name!!.first} ${user.name.last}"""
             subtitleTextView?.text = user.gender
+
+            Picasso.get()
+                .load(user.picture!!.thumbnail)
+                .into(itemView.avatar_view)
+
+            itemView.setOnClickListener{itemClickListener(adapterPosition)}
         }
     }
 }
