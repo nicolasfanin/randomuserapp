@@ -2,4 +2,15 @@
     <string name="app_name">Userapp</string>
 
     <string name="user_name">%1$s %2$s</string>
+
+    <string name="user_details_email"><![CDATA[<b>Email: </b> %1$s <br>]]></string>
+    <string name="user_details_phone"><![CDATA[<b>Phone: </b> %1$s <br>]]></string>
+    <string name="user_details_cell"><![CDATA[<b>Cellular: </b> %1$s <br>]]></string>
+    <string name="user_details_user_name"><![CDATA[<b>User name: </b> %1$s <br>]]></string>
+    <string name="user_details_address"><![CDATA[<br><b>Address: </b> <br>]]></string>
+    <string name="user_details_street"><![CDATA[<b>Street: </b> %1$s <br>]]></string>
+    <string name="user_details_city"><![CDATA[<b>City: </b> %1$s <br>]]></string>
+    <string name="user_details_state"><![CDATA[<b>State: </b> %1$s <br>]]></string>
+    <string name="user_details_post_code"><![CDATA[<b>post Code: </b> %1$s <br>]]></string>
+
 </resources>
