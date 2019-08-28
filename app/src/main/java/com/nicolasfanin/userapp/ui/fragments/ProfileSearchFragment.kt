@@ -9,7 +9,6 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
 import com.nicolasfanin.userapp.ui.adapters.UserAdapter
@@ -18,6 +17,9 @@ import com.nicolasfanin.userapp.ui.data.model.User
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_profile_search.*
+import android.view.View.OnAttachStateChangeListener
+
+
 
 class ProfileSearchFragment : Fragment() {
 
@@ -46,31 +48,33 @@ class ProfileSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listener = (activity as ProfileSearchListener)
+    }
+
+    override fun onResume() {
+        super.onResume()
         loadData()
     }
 
-    //TODO: this should be placed in a FragmentPresenter
     private fun loadData() {
         val repository = UserRepositoryProvider.provideUserRepository()
 
+        //TODO: this could be placed in a FragmentPresenter
         repository.getUsers()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({ result ->
-                Log.d("Result", "There are ${result.results.get(0)} Java developers in Lagos")
                 userList = result.results
-                updateUi()
+                updateUi(userList)
                 hideProgressBar()
             }, { error ->
                 error.printStackTrace()
             })
     }
 
-    private fun updateUi() {
+    private fun updateUi(userList : List<User>) {
         val itemOnClick: (Int) -> Unit = { position ->
             userRecyclerView.adapter!!.notifyDataSetChanged()
-            Toast.makeText(this.context,"$position. item clicked.",Toast.LENGTH_SHORT).show()
-            listener.navigateToProfileDetails(userList.get(position))
+            listener.navigateToProfileDetails(userList[position])
         }
 
         userRecyclerView.apply {
@@ -99,6 +103,32 @@ class ProfileSearchFragment : Fragment() {
             setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW or MenuItem.SHOW_AS_ACTION_IF_ROOM)
             actionView = searchView
         }
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                //TODO: add recomendations
+                Log.d("SEARCH", newText)
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                var filterList = userList.filter { it.name!!.first.equals(query) }
+
+                updateUi(if(filterList.isEmpty()) userList else filterList)
+                return false
+            }
+        })
+
+        searchView.addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
+
+            override fun onViewDetachedFromWindow(arg0: View) {
+                updateUi(userList)
+            }
+
+            override fun onViewAttachedToWindow(arg0: View) {
+                // no operation
+            }
+        })
     }
 
     interface ProfileSearchListener {

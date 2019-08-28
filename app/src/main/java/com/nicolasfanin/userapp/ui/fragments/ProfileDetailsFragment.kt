@@ -94,6 +94,7 @@ class ProfileDetailsFragment : Fragment() {
         }
     }
 
+    //TODO: Finish this.
     private fun saveContactAsFavourite() {
         val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
         editor.putString(
