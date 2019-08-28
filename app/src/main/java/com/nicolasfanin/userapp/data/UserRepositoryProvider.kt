@@ -1,4 +1,4 @@
-package com.nicolasfanin.userapp.ui.data
+package com.nicolasfanin.userapp.data
 
 object UserRepositoryProvider {
 

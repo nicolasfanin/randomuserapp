@@ -2,11 +2,10 @@ package com.nicolasfanin.userapp.ui.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.nicolasfanin.userapp.R
-import com.nicolasfanin.userapp.ui.data.model.User
+import com.nicolasfanin.userapp.data.model.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.user_item.view.*
 

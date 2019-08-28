@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.Toast
 import com.nicolasfanin.userapp.R
-import com.nicolasfanin.userapp.ui.data.model.User
-import com.nicolasfanin.userapp.ui.data.model.UserData
+import com.nicolasfanin.userapp.data.model.User
+import com.nicolasfanin.userapp.data.model.UserData
 import com.nicolasfanin.userapp.ui.fragments.ProfileDetailsFragment
 import com.nicolasfanin.userapp.ui.fragments.ProfileSearchFragment
 

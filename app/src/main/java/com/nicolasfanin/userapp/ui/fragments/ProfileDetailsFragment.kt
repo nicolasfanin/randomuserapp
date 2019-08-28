@@ -1,21 +1,16 @@
 package com.nicolasfanin.userapp.ui.fragments
 
-import android.app.Activity
-import android.content.ContentProviderOperation
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.provider.ContactsContract
 import android.support.v4.app.Fragment
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.nicolasfanin.userapp.R
-import com.nicolasfanin.userapp.ui.data.model.User
-import com.nicolasfanin.userapp.ui.data.model.UserData
+import com.nicolasfanin.userapp.data.model.User
+import com.nicolasfanin.userapp.data.model.UserData
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile_details.*
 import kotlinx.android.synthetic.main.user_detail_layout.*
@@ -71,8 +66,7 @@ class ProfileDetailsFragment : Fragment() {
             .load(userData.user.picture!!.large)
             .into(expandedImage)
 
-        profile_toolbar.title =
-            """${userData.user.name!!.title} ${userData.user.name!!.first} ${userData.user.name!!.last}"""
+        profile_toolbar.title = userData.user.completeUserName
 
         var contentDescription = StringBuilder()
             .append(getString(R.string.user_details_email, userData.user.email))

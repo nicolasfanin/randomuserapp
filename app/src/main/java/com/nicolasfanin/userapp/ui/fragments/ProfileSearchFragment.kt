@@ -12,14 +12,12 @@ import android.view.*
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
 import com.nicolasfanin.userapp.ui.adapters.UserAdapter
-import com.nicolasfanin.userapp.ui.data.UserRepositoryProvider
-import com.nicolasfanin.userapp.ui.data.model.User
+import com.nicolasfanin.userapp.data.UserRepositoryProvider
+import com.nicolasfanin.userapp.data.model.User
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_profile_search.*
 import android.view.View.OnAttachStateChangeListener
-
-
 
 class ProfileSearchFragment : Fragment() {
 
@@ -58,14 +56,17 @@ class ProfileSearchFragment : Fragment() {
     private fun loadData() {
         val repository = UserRepositoryProvider.provideUserRepository()
 
-        //TODO: this could be placed in a FragmentPresenter
+        //TODO: this should be placed in a FragmentPresenter
         repository.getUsers()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({ result ->
                 userList = result.results
-                updateUi(userList)
-                hideProgressBar()
+                if(userList.isNotEmpty()) {
+                    processUserList();
+                    updateUi(userList)
+                    hideProgressBar()
+                }
             }, { error ->
                 error.printStackTrace()
             })
@@ -83,6 +84,12 @@ class ProfileSearchFragment : Fragment() {
         }
     }
 
+    private fun processUserList() {
+        for(user: User in userList) {
+            user.completeUserName = """${user.name!!.title} ${user.name.first} ${user.name.last}"""
+        }
+    }
+
     private fun hideProgressBar() {
         progress_bar.visibility = View.GONE
         userRecyclerView.visibility = View.VISIBLE
@@ -91,7 +98,6 @@ class ProfileSearchFragment : Fragment() {
     private fun showProgressBar() {
         progress_bar.visibility = View.VISIBLE
         userRecyclerView.visibility = View.INVISIBLE
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -112,7 +118,7 @@ class ProfileSearchFragment : Fragment() {
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                var filterList = userList.filter { it.name!!.first.equals(query) }
+                var filterList = userList.filter { it.completeUserName!!.contains(query) }
 
                 updateUi(if(filterList.isEmpty()) userList else filterList)
                 return false

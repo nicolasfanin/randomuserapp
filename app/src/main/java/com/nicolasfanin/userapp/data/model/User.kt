@@ -1,4 +1,4 @@
-package com.nicolasfanin.userapp.ui.data.model
+package com.nicolasfanin.userapp.data.model
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -13,7 +13,8 @@ data class User(
     @SerializedName("login") val login: Login?,
     @SerializedName("phone") val phone: String? = "no phone",
     @SerializedName("cell") val cell: String? = "no cell",
-    @SerializedName("location") val location: Location?
+    @SerializedName("location") val location: Location?,
+    var completeUserName: String? = "no complete name"
 )
 
 data class Name(

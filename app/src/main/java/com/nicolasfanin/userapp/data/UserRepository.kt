@@ -1,6 +1,6 @@
-package com.nicolasfanin.userapp.ui.data
+package com.nicolasfanin.userapp.data
 
-import com.nicolasfanin.userapp.ui.data.model.Result
+import com.nicolasfanin.userapp.data.model.Result
 import io.reactivex.Observable
 
 class UserRepository(val apiService: RandomUserService) {
