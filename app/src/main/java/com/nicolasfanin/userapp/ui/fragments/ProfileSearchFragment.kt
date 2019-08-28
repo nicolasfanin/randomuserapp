@@ -1,6 +1,5 @@
 package com.nicolasfanin.userapp.ui.fragments
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -10,7 +9,6 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
-import android.widget.ProgressBar
 import android.widget.Toast
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
@@ -30,7 +28,6 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private lateinit var listener: ProfileSearchListener
-    private lateinit var progressBar: ProgressBar
     private lateinit var userRecyclerView: RecyclerView
     private lateinit var userList: List<User>
 

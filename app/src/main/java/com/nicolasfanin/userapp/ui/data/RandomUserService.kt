@@ -9,7 +9,7 @@ import retrofit2.http.GET
 
 interface RandomUserService {
 
-    @GET("?results=20")
+    @GET("?results=100")
     fun getUsers(): Observable<Result>
 
     companion object Factory {

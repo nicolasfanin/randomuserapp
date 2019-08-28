@@ -1,12 +1,18 @@
 package com.nicolasfanin.userapp.ui.fragments
 
+import android.app.Activity
+import android.content.ContentProviderOperation
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.provider.ContactsContract
 import android.support.v4.app.Fragment
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.data.model.User
 import com.nicolasfanin.userapp.ui.data.model.UserData
@@ -14,18 +20,28 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile_details.*
 import kotlinx.android.synthetic.main.user_detail_layout.*
 
+
 class ProfileDetailsFragment : Fragment() {
 
+    private var EMPTY = ""
+    private var ERROR_INPUT_EMPTY = "Please fill all fields"
+    private var SAVED = "Saved!"
+    private var myPreferences = "myPrefs"
+    private var NAME = "name"
+    private var PHONE_NUMBER = "phoneNumber"
+    private var EMAIL = "email"
+
+    private lateinit var listener: ProfileDetailsListener
     private lateinit var userData: UserData
 
     companion object {
         private const val USER_ARGUMENT = "USER"
 
         fun newInstance(user: User): ProfileDetailsFragment {
-            val args = Bundle()
-            args.putSerializable(USER_ARGUMENT, UserData(user))
+            val arguments = Bundle()
+            arguments.putSerializable(USER_ARGUMENT, UserData(user))
             val profileDetailsFragment = ProfileDetailsFragment()
-            profileDetailsFragment.arguments = args
+            profileDetailsFragment.arguments = arguments
             return profileDetailsFragment
         }
     }
@@ -38,7 +54,16 @@ class ProfileDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        listener = (activity as ProfileDetailsListener)
         loadData()
+        save_contact_floating_button.setOnClickListener {
+            listener.addNewContact(userData)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(USER_ARGUMENT, userData)
     }
 
     fun loadData() {
@@ -67,6 +92,26 @@ class ProfileDetailsFragment : Fragment() {
         } else {
             content_data.text = Html.fromHtml(contentDescription.toString())
         }
+    }
+
+    private fun saveContactAsFavourite() {
+        val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
+        editor.putString(
+            NAME,
+            """${userData.user.name!!.title}
+                    |${userData.user.name!!.first}
+                    |${userData.user.name!!.last}""".trimMargin()
+        )
+        editor.putString(PHONE_NUMBER, userData.user.phone)
+        editor.apply()
+    }
+
+
+
+    interface ProfileDetailsListener {
+
+        fun addNewContact(userData: UserData)
+
     }
 
 }
