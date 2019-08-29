@@ -11,7 +11,7 @@ import android.util.Log
 import android.view.*
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
-import com.nicolasfanin.userapp.ui.adapters.UserAdapter
+import com.nicolasfanin.userapp.ui.fragments.adapters.UserAdapter
 import com.nicolasfanin.userapp.data.UserRepositoryProvider
 import com.nicolasfanin.userapp.data.model.User
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -14,6 +14,7 @@ data class User(
     @SerializedName("phone") val phone: String? = "no phone",
     @SerializedName("cell") val cell: String? = "no cell",
     @SerializedName("location") val location: Location?,
+    @SerializedName("id") val id: Id?,
     var completeUserName: String? = "no complete name"
 )
 
@@ -38,6 +39,11 @@ data class Location(
     @SerializedName("city") val city: String? = "no city",
     @SerializedName("state") val state: String? = "no state",
     @SerializedName("postcode") val postcode: String? = "no postcode"
+)
+
+data class Id(
+    @SerializedName("name") val name: String? = "no id name",
+    @SerializedName("value") val value: String? = "no value"
 )
 
 data class Result(val results: List<User>)

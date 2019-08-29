@@ -1,4 +1,4 @@
-package com.nicolasfanin.userapp.ui.adapters
+package com.nicolasfanin.userapp.ui.fragments.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

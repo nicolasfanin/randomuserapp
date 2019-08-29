@@ -1,5 +1,6 @@
-package com.nicolasfanin.userapp.data
+package com.nicolasfanin.userapp.data.repository
 
+import com.nicolasfanin.userapp.data.RandomUserService
 import com.nicolasfanin.userapp.data.model.Result
 import io.reactivex.Observable
 
