@@ -1,15 +1,17 @@
 package com.nicolasfanin.userapp.data.repository
 
-import android.app.Application
-import com.nicolasfanin.userapp.data.dao.UserDao
-import com.nicolasfanin.userapp.data.managers.FavouriteUserDatabase
+import android.arch.lifecycle.LiveData
+import androidx.annotation.WorkerThread
+import com.nicolasfanin.userapp.data.dao.FavouriteUserDao
+import com.nicolasfanin.userapp.data.model.FavouriteUser
 
-class FavouriteUserRespository(application: Application) {
+class FavouriteUserRespository(private val favouriteUserDao: FavouriteUserDao) {
 
-    private val userDao: UserDao
+    val allUsers: LiveData<List<FavouriteUser>> = favouriteUserDao.getAllUsers()
 
-    init {
-        val database: FavouriteUserDatabase = FavouriteUserDatabase.getUserAppDatabase(application.applicationContext)!!
-        userDao = database.userDao()
+    @WorkerThread
+    suspend fun insert(favouriteUser: FavouriteUser){
+        favouriteUserDao.insertUser(favouriteUser)
     }
+
 }

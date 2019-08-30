@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.nicolasfanin.userapp.data.dao.UserDao
+import com.nicolasfanin.userapp.data.dao.FavouriteUserDao
 import com.nicolasfanin.userapp.data.model.FavouriteUser
 
 @Database(entities = arrayOf(FavouriteUser::class), version = 1)
 abstract class FavouriteUserDatabase: RoomDatabase() {
 
-    abstract fun userDao(): UserDao
+    abstract fun userDao(): FavouriteUserDao
 
     companion object {
         var INSTANCE: FavouriteUserDatabase? = null
