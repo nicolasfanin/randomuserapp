@@ -107,6 +107,11 @@ class ProfileSearchFragment : Fragment() {
         }
 
         chargeMoreItemsWhenScrollToEnd(repository, userLinearLayoutManager, isSearching)
+        if(isSearching) {
+            hideFavouriteUserSection()
+        } else {
+            showFavouriteUserSection()
+        }
     }
 
     private fun chargeMoreItemsWhenScrollToEnd(
@@ -172,6 +177,14 @@ class ProfileSearchFragment : Fragment() {
         favouriteUserRecyclerView.visibility = View.INVISIBLE
     }
 
+    private fun hideFavouriteUserSection() {
+        favouriteUserRecyclerView.visibility = View.GONE
+    }
+
+    private fun showFavouriteUserSection() {
+        favouriteUserRecyclerView.visibility = if (shouldShowFavouritesUserSection()) View.VISIBLE else View.GONE
+    }
+
     private fun shouldShowFavouritesUserSection(): Boolean {
         if (favouriteUserRecyclerView.adapter!!.itemCount > 0) return true
         return false
@@ -212,7 +225,7 @@ class ProfileSearchFragment : Fragment() {
             }
 
             override fun onViewAttachedToWindow(arg0: View) {
-                // no operation
+
             }
         })
     }
