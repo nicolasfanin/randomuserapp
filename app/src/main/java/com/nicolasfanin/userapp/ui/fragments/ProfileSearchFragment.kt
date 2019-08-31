@@ -61,7 +61,7 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private fun loadData() {
-        //TODO: this should be placed in a Presenter
+        // This should be placed in a Presenter
         repository.getUsers()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -70,7 +70,7 @@ class ProfileSearchFragment : Fragment() {
                 userList = result.results
                 if (userList.isNotEmpty()) {
                     processUserList()
-                    updateUi(userList)
+                    updateUi(userList, false)
                     hideProgressBar()
                 }
             }, { error ->
@@ -78,7 +78,7 @@ class ProfileSearchFragment : Fragment() {
             })
     }
 
-    private fun updateUi(userList: List<User>) {
+    private fun updateUi(userList: List<User>, isSearching: Boolean) {
         //Favourite user section
         favouriteUserRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -106,15 +106,23 @@ class ProfileSearchFragment : Fragment() {
             adapter = UserAdapter(userList, itemOnClick)
         }
 
-        chargeMoreItemsWhenScrollToEnd(repository, userLinearLayoutManager)
+        chargeMoreItemsWhenScrollToEnd(repository, userLinearLayoutManager, isSearching)
     }
 
-    private fun chargeMoreItemsWhenScrollToEnd(repository: UserRepository, userLinearLayoutManager: LinearLayoutManager) {
+    private fun chargeMoreItemsWhenScrollToEnd(
+        repository: UserRepository,
+        userLinearLayoutManager: LinearLayoutManager,
+        isSearching: Boolean
+    ) {
+        if (isSearching) {
+            userRecyclerView.clearOnScrollListeners()
+            return
+        }
+
         userRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if(userLinearLayoutManager.findLastCompletelyVisibleItemPosition() >= userLinearLayoutManager.itemCount -1) {
-                    // add footer
+                if (!isSearching && userLinearLayoutManager.findLastCompletelyVisibleItemPosition() >= userLinearLayoutManager.itemCount - 1) {
 
                     repository.getPaginationUsers(page, SEED)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -122,7 +130,7 @@ class ProfileSearchFragment : Fragment() {
                         .subscribe({ result ->
                             serviceInfo = result.info
 
-                            userList += result.results
+                            userList = userList + result.results
                             if (userList.isNotEmpty()) {
                                 processUserList()
 
@@ -134,6 +142,8 @@ class ProfileSearchFragment : Fragment() {
                                 userRecyclerView.apply {
                                     adapter = UserAdapter(userList, itemOnClick)
                                 }
+
+                                recyclerView.scrollToPosition(userLinearLayoutManager.itemCount - 2)
                             }
                             page++
                         }, { error ->
@@ -179,16 +189,16 @@ class ProfileSearchFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                //TODO: This should be made by cursor adapter.
+                // This should be made by cursor adapter.
                 var filterList = userList.filter { it.completeUserName!!.contains(newText) }
-                updateUi(if (filterList.isEmpty()) userList else filterList)
+                updateUi(if (filterList.isEmpty()) userList else filterList, true)
                 return false
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
                 var filterList = userList.filter { it.completeUserName!!.contains(query) }
 
-                updateUi(if (filterList.isEmpty()) userList else filterList)
+                updateUi(if (filterList.isEmpty()) userList else filterList, true)
                 return false
             }
         })
@@ -198,7 +208,7 @@ class ProfileSearchFragment : Fragment() {
         searchView.addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
 
             override fun onViewDetachedFromWindow(arg0: View) {
-                updateUi(userList)
+                updateUi(userList, false)
             }
 
             override fun onViewAttachedToWindow(arg0: View) {
