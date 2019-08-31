@@ -1,6 +1,5 @@
 package com.nicolasfanin.userapp.ui.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -16,11 +15,11 @@ import android.view.View.OnAttachStateChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Update
 import com.nicolasfanin.userapp.ui.fragments.adapters.FavouriteUserAdapter
 
 class ProfileSearchFragment : Fragment() {
@@ -137,8 +136,10 @@ class ProfileSearchFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                //TODO: add recomendations
                 Log.d("SEARCH", newText)
+                var filterList = userList.filter { it.completeUserName!!.contains(newText) }
+
+                updateUi(if (filterList.isEmpty()) userList else filterList)
                 return false
             }
 
@@ -149,6 +150,8 @@ class ProfileSearchFragment : Fragment() {
                 return false
             }
         })
+
+        searchView.queryHint = "Search users"
 
         searchView.addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
 
