@@ -10,4 +10,8 @@ class UserRepository(val apiService: RandomUserService) {
         return apiService.getUsers()
     }
 
+    fun getPaginationUsers(page: Int, seed: String): Observable<Result> {
+        return apiService.getPaginationUsers(page, seed)
+    }
+
 }

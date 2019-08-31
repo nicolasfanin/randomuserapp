@@ -47,4 +47,9 @@ data class Id(
     @SerializedName("value") val value: String? = "no value"
 )
 
-data class Result(val results: List<User>)
+data class ServiceInfo(
+    @SerializedName("seed") val seed: String? = "no seed",
+    @SerializedName("page") val page: String? = "no page"
+)
+
+data class Result(val results: List<User>, val info: ServiceInfo)

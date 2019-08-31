@@ -1,7 +1,6 @@
 package com.nicolasfanin.userapp.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
@@ -15,11 +14,12 @@ import android.view.View.OnAttachStateChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.nicolasfanin.userapp.data.model.ServiceInfo
+import com.nicolasfanin.userapp.data.repository.UserRepository
 import com.nicolasfanin.userapp.ui.fragments.adapters.FavouriteUserAdapter
 
 class ProfileSearchFragment : Fragment() {
@@ -30,10 +30,15 @@ class ProfileSearchFragment : Fragment() {
         }
     }
 
+    private val SEED = "profileSearch"
+
     private lateinit var listener: ProfileSearchListener
     private lateinit var favouriteUserRecyclerView: RecyclerView
     private lateinit var userRecyclerView: RecyclerView
     private lateinit var userList: List<User>
+    private lateinit var repository: UserRepository
+    private lateinit var serviceInfo: ServiceInfo
+    private var page: Int = 1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_profile_search, container, false)
@@ -45,6 +50,7 @@ class ProfileSearchFragment : Fragment() {
         userRecyclerView = view.findViewById(R.id.user_recycler_view)
 
         setHasOptionsMenu(true)
+        repository = UserRepositoryProvider.provideUserRepository()
         loadData()
         return view
     }
@@ -55,13 +61,12 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private fun loadData() {
-        val repository = UserRepositoryProvider.provideUserRepository()
-
         //TODO: this should be placed in a Presenter
         repository.getUsers()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({ result ->
+                serviceInfo = result.info
                 userList = result.results
                 if (userList.isNotEmpty()) {
                     processUserList()
@@ -95,10 +100,48 @@ class ProfileSearchFragment : Fragment() {
             listener.navigateToProfileDetails(userList[position])
         }
 
+        val userLinearLayoutManager = LinearLayoutManager(activity)
         userRecyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = userLinearLayoutManager
             adapter = UserAdapter(userList, itemOnClick)
         }
+
+        chargeMoreItemsWhenScrollToEnd(repository, userLinearLayoutManager)
+    }
+
+    private fun chargeMoreItemsWhenScrollToEnd(repository: UserRepository, userLinearLayoutManager: LinearLayoutManager) {
+        userRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if(userLinearLayoutManager.findLastCompletelyVisibleItemPosition() >= userLinearLayoutManager.itemCount -1) {
+                    // add footer
+
+                    repository.getPaginationUsers(page, SEED)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            serviceInfo = result.info
+
+                            userList += result.results
+                            if (userList.isNotEmpty()) {
+                                processUserList()
+
+                                val itemOnClick: (Int) -> Unit = { position ->
+                                    userRecyclerView.adapter!!.notifyDataSetChanged()
+                                    listener.navigateToProfileDetails(userList[position])
+                                }
+
+                                userRecyclerView.apply {
+                                    adapter = UserAdapter(userList, itemOnClick)
+                                }
+                            }
+                            page++
+                        }, { error ->
+                            error.printStackTrace()
+                        })
+                }
+            }
+        })
     }
 
     private fun processUserList() {
@@ -136,9 +179,8 @@ class ProfileSearchFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                Log.d("SEARCH", newText)
+                //TODO: This should be made by cursor adapter.
                 var filterList = userList.filter { it.completeUserName!!.contains(newText) }
-
                 updateUi(if (filterList.isEmpty()) userList else filterList)
                 return false
             }
