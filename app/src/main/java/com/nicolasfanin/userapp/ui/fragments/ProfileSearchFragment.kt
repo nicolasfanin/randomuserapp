@@ -16,8 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.nicolasfanin.userapp.ui.fragments.adapters.FavouriteUserAdapter
 
 class ProfileSearchFragment : Fragment() {
 
@@ -28,6 +30,7 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private lateinit var listener: ProfileSearchListener
+    private lateinit var favouriteUserRecyclerView: RecyclerView
     private lateinit var userRecyclerView: RecyclerView
     private lateinit var userList: List<User>
 
@@ -37,6 +40,7 @@ class ProfileSearchFragment : Fragment() {
         val searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(searchToolbar)
 
+        favouriteUserRecyclerView = view.findViewById(R.id.favourite_user_recycler_view)
         userRecyclerView = view.findViewById(R.id.user_recycler_view)
 
         setHasOptionsMenu(true)
@@ -62,7 +66,7 @@ class ProfileSearchFragment : Fragment() {
             .subscribeOn(Schedulers.io())
             .subscribe({ result ->
                 userList = result.results
-                if(userList.isNotEmpty()) {
+                if (userList.isNotEmpty()) {
                     processUserList();
                     updateUi(userList)
                     hideProgressBar()
@@ -72,7 +76,19 @@ class ProfileSearchFragment : Fragment() {
             })
     }
 
-    private fun updateUi(userList : List<User>) {
+    private fun updateUi(userList: List<User>) {
+        //Favourite user section
+        favouriteUserRecyclerView.apply {
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+            val favouriteUserAdapter = FavouriteUserAdapter(context)
+            adapter = favouriteUserAdapter
+            (activity as MainActivity).favouriteUserViewModel.allUsers.observe(
+                (activity as MainActivity),
+                Observer { user -> user?.let { favouriteUserAdapter.setUsers(it) } })
+        }
+
+
+        // User List section
         val itemOnClick: (Int) -> Unit = { position ->
             userRecyclerView.adapter!!.notifyDataSetChanged()
             listener.navigateToProfileDetails(userList[position])
@@ -85,7 +101,7 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private fun processUserList() {
-        for(user: User in userList) {
+        for (user: User in userList) {
             user.completeUserName = """${user.name!!.title} ${user.name.first} ${user.name.last}"""
         }
     }
@@ -120,7 +136,7 @@ class ProfileSearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 var filterList = userList.filter { it.completeUserName!!.contains(query) }
 
-                updateUi(if(filterList.isEmpty()) userList else filterList)
+                updateUi(if (filterList.isEmpty()) userList else filterList)
                 return false
             }
         })

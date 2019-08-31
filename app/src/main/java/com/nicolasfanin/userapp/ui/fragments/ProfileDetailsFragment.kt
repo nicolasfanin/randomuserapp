@@ -8,9 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.nicolasfanin.userapp.R
+import com.nicolasfanin.userapp.data.model.FavouriteUser
 import com.nicolasfanin.userapp.data.model.User
 import com.nicolasfanin.userapp.data.model.UserData
+import com.nicolasfanin.userapp.data.viewModel.FavouriteUserViewModel
+import com.nicolasfanin.userapp.ui.activities.MainActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile_details.*
 
@@ -89,17 +93,13 @@ class ProfileDetailsFragment : Fragment() {
         }
     }
 
-    //TODO: Finish this.
     private fun saveContactAsFavourite() {
-        val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
-        editor.putString(
-            NAME,
-            """${userData.user.name!!.title}
-                    |${userData.user.name!!.first}
-                    |${userData.user.name!!.last}""".trimMargin()
-        )
-        editor.putString(PHONE_NUMBER, userData.user.phone)
-        editor.apply()
+        val favouriteUser = FavouriteUser(
+            userData.user.id!!.value.toString(),
+            userData.user.completeUserName.toString(),
+            userData.user.picture!!.medium.toString())
+
+        (activity as MainActivity).favouriteUserViewModel.insert(favouriteUser)
     }
 
 

@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.data.model.User
 import com.nicolasfanin.userapp.data.model.UserData
+import com.nicolasfanin.userapp.data.viewModel.FavouriteUserViewModel
 import com.nicolasfanin.userapp.ui.fragments.ProfileDetailsFragment
 import com.nicolasfanin.userapp.ui.fragments.ProfileSearchFragment
 
@@ -16,9 +19,14 @@ import com.nicolasfanin.userapp.ui.fragments.ProfileSearchFragment
 class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchListener,
     ProfileDetailsFragment.ProfileDetailsListener {
 
+    lateinit var favouriteUserViewModel: FavouriteUserViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        initializeComponents()
+
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -26,6 +34,10 @@ class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchLis
                 .addToBackStack("profileList")
                 .commit()
         }
+    }
+
+    private fun initializeComponents() {
+        favouriteUserViewModel = ViewModelProviders.of(this).get(FavouriteUserViewModel::class.java)
     }
 
     override fun navigateToProfileDetails(user: User) {

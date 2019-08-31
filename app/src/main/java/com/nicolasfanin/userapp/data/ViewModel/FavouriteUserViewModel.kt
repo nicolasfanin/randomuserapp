@@ -13,10 +13,10 @@ import kotlinx.coroutines.launch
 class FavouriteUserViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: FavouriteUserRespository
-    private val allUsers: LiveData<List<FavouriteUser>>
+    val allUsers: LiveData<List<FavouriteUser>>
 
     init {
-        val database = FavouriteUserDatabase.getUserAppDatabase(application.applicationContext)!!
+        val database = FavouriteUserDatabase.getUserAppDatabase(application.applicationContext, viewModelScope)!!
         val favouriteUserDao = database.userDao()
         repository = FavouriteUserRespository(favouriteUserDao)
         allUsers = repository.allUsers

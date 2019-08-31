@@ -23,7 +23,7 @@ class UserAdapter(private val userList: List<User>, private val listener: (Int) 
 
     override fun getItemCount(): Int = userList.size
 
-    class UserViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
+    inner class UserViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.user_item, parent, false)) {
 
         private var userNameTextView: TextView? = null
