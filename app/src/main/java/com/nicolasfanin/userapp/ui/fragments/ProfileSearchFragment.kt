@@ -108,7 +108,7 @@ class ProfileSearchFragment : Fragment() {
 
         chargeMoreItemsWhenScrollToEnd(repository, userLinearLayoutManager, isSearching)
 
-        if(isSearching) {
+        if (isSearching) {
             hideFavouriteUserSection()
         } else {
             showFavouriteUserSection()
@@ -162,7 +162,10 @@ class ProfileSearchFragment : Fragment() {
 
     private fun processUserList() {
         for (user: User in userList) {
-            user.completeUserName = """${user.name!!.title} ${user.name.first} ${user.name.last}"""
+            val title = user.name!!.title?.capitalize()
+            val firstName = user.name!!.first?.capitalize()
+            val lastName = user.name!!.last?.capitalize()
+            user.completeUserName = """$title $firstName $lastName"""
         }
     }
 

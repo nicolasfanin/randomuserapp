@@ -30,6 +30,7 @@
 
     <style name="Text.title.black">
         <item name="android:textColor">@color/black</item>
+        <item name="android:capitalize">words</item>
     </style>
 
     <style name="Text.subtitle.black">
