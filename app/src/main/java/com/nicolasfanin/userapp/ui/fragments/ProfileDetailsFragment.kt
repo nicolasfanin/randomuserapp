@@ -2,27 +2,21 @@ package com.nicolasfanin.userapp.ui.fragments
 
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.data.model.FavouriteUser
 import com.nicolasfanin.userapp.data.model.User
 import com.nicolasfanin.userapp.data.model.UserData
-import com.nicolasfanin.userapp.data.viewModel.FavouriteUserViewModel
 import com.nicolasfanin.userapp.ui.activities.MainActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile_details.*
 
 
 class ProfileDetailsFragment : Fragment() {
-
-    private var NAME = "name"
-    private var PHONE_NUMBER = "phoneNumber"
 
     private lateinit var listener: ProfileDetailsListener
     private lateinit var userData: UserData
@@ -48,7 +42,6 @@ class ProfileDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listener = (activity as ProfileDetailsListener)
-        loadData()
         nestedScroll.isNestedScrollingEnabled = true
 
         save_favourite_floating_button.setOnClickListener {
@@ -58,14 +51,19 @@ class ProfileDetailsFragment : Fragment() {
         save_contact_button.setOnClickListener {
             listener.addNewContact(userData)
         }
+
+        updateUi()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putSerializable(USER_ARGUMENT, userData)
+    private fun updateUi() {
+        loadData()
+
+        if (checkIfUserAlreadyExists()) {
+            save_favourite_floating_button.setImageDrawable(resources.getDrawable(R.drawable.baseline_favorite_white_36))
+        }
     }
 
-    fun loadData() {
+    private fun loadData() {
         Picasso.get()
             .load(userData.user.picture!!.large)
             .into(expandedImage)
@@ -94,14 +92,29 @@ class ProfileDetailsFragment : Fragment() {
     }
 
     private fun saveContactAsFavourite() {
+        if (checkIfUserAlreadyExists()) {
+            updateUi()
+            return
+        }
+        //Need a wrapper process to be implemented here.
         val favouriteUser = FavouriteUser(
-            userData.user.id!!.value.toString(),
+            userData.user.login!!.uuid.toString(),
             userData.user.completeUserName.toString(),
             userData.user.picture!!.medium.toString())
 
         (activity as MainActivity).favouriteUserViewModel.insert(favouriteUser)
+
+        save_favourite_floating_button.setImageDrawable(resources.getDrawable(R.drawable.baseline_favorite_white_36))
     }
 
+    private fun checkIfUserAlreadyExists(): Boolean {
+        val favouriteUser =
+            (activity as MainActivity).favouriteUserViewModel.getUserById(userData.user.login!!.uuid.toString())
+        if (favouriteUser != null && favouriteUser.userId.equals(userData.user.login!!.uuid.toString())) {
+            return true
+        }
+        return false
+    }
 
     interface ProfileDetailsListener {
 

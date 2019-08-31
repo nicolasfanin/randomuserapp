@@ -31,6 +31,7 @@ data class Picture(
 )
 
 data class Login(
+    @SerializedName("uuid") val uuid: String? = "no uuid",
     @SerializedName("username") val username: String? = "no username"
 )
 

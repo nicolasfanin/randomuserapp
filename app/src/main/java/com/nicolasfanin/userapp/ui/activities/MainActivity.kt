@@ -27,11 +27,9 @@ class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchLis
 
         initializeComponents()
 
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, ProfileSearchFragment.newInstance(), "profileList")
-                .addToBackStack("profileList")
+                .replace(R.id.fragment_container, ProfileSearchFragment.newInstance(), "profileList")
                 .commit()
         }
     }

@@ -15,8 +15,9 @@ interface FavouriteUserDao {
     suspend fun insertUser(favouriteUser: FavouriteUser)
 
     @Query("SELECT * FROM favourite_user")
-    fun getUsers() : List<FavouriteUser>
-
-    @Query("SELECT * FROM favourite_user")
     fun getAllUsers(): LiveData<List<FavouriteUser>>
+
+    @Query("SELECT * FROM favourite_user WHERE userId == :userId")
+    fun getUserById(userId: String): FavouriteUser
+
 }
