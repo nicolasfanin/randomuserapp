@@ -1,23 +1,27 @@
 package com.nicolasfanin.userapp.ui.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
-import com.nicolasfanin.userapp.ui.adapters.UserAdapter
+import com.nicolasfanin.userapp.ui.fragments.adapters.UserAdapter
 import com.nicolasfanin.userapp.data.UserRepositoryProvider
 import com.nicolasfanin.userapp.data.model.User
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_profile_search.*
 import android.view.View.OnAttachStateChangeListener
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Update
+import com.nicolasfanin.userapp.ui.fragments.adapters.FavouriteUserAdapter
 
 class ProfileSearchFragment : Fragment() {
 
@@ -28,6 +32,7 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private lateinit var listener: ProfileSearchListener
+    private lateinit var favouriteUserRecyclerView: RecyclerView
     private lateinit var userRecyclerView: RecyclerView
     private lateinit var userList: List<User>
 
@@ -37,9 +42,11 @@ class ProfileSearchFragment : Fragment() {
         val searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(searchToolbar)
 
+        favouriteUserRecyclerView = view.findViewById(R.id.favourite_user_recycler_view)
         userRecyclerView = view.findViewById(R.id.user_recycler_view)
 
         setHasOptionsMenu(true)
+        loadData()
         return view
     }
 
@@ -48,22 +55,17 @@ class ProfileSearchFragment : Fragment() {
         listener = (activity as ProfileSearchListener)
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadData()
-    }
-
     private fun loadData() {
         val repository = UserRepositoryProvider.provideUserRepository()
 
-        //TODO: this should be placed in a FragmentPresenter
+        //TODO: this should be placed in a Presenter
         repository.getUsers()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({ result ->
                 userList = result.results
-                if(userList.isNotEmpty()) {
-                    processUserList();
+                if (userList.isNotEmpty()) {
+                    processUserList()
                     updateUi(userList)
                     hideProgressBar()
                 }
@@ -72,7 +74,23 @@ class ProfileSearchFragment : Fragment() {
             })
     }
 
-    private fun updateUi(userList : List<User>) {
+    private fun updateUi(userList: List<User>) {
+        //Favourite user section
+        favouriteUserRecyclerView.apply {
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+            val favouriteUserAdapter = FavouriteUserAdapter(context)
+            adapter = favouriteUserAdapter
+            (activity as MainActivity).favouriteUserViewModel.allUsers.observe(
+                (activity as MainActivity),
+                Observer { user ->
+                    user?.let { favouriteUserAdapter.setUsers(it) }.also {
+                        favouriteUserRecyclerView.visibility =
+                            if (shouldShowFavouritesUserSection()) View.VISIBLE else View.GONE
+                    }
+                })
+        }
+
+        // User List section
         val itemOnClick: (Int) -> Unit = { position ->
             userRecyclerView.adapter!!.notifyDataSetChanged()
             listener.navigateToProfileDetails(userList[position])
@@ -85,19 +103,26 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private fun processUserList() {
-        for(user: User in userList) {
+        for (user: User in userList) {
             user.completeUserName = """${user.name!!.title} ${user.name.first} ${user.name.last}"""
         }
     }
 
     private fun hideProgressBar() {
         progress_bar.visibility = View.GONE
+        favouriteUserRecyclerView.visibility = if (shouldShowFavouritesUserSection()) View.VISIBLE else View.GONE
         userRecyclerView.visibility = View.VISIBLE
     }
 
     private fun showProgressBar() {
         progress_bar.visibility = View.VISIBLE
         userRecyclerView.visibility = View.INVISIBLE
+        favouriteUserRecyclerView.visibility = View.INVISIBLE
+    }
+
+    private fun shouldShowFavouritesUserSection(): Boolean {
+        if (favouriteUserRecyclerView.adapter!!.itemCount > 0) return true
+        return false
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -120,7 +145,7 @@ class ProfileSearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 var filterList = userList.filter { it.completeUserName!!.contains(query) }
 
-                updateUi(if(filterList.isEmpty()) userList else filterList)
+                updateUi(if (filterList.isEmpty()) userList else filterList)
                 return false
             }
         })

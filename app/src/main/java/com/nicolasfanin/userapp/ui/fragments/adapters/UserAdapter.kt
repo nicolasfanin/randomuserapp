@@ -1,9 +1,9 @@
-package com.nicolasfanin.userapp.ui.adapters
+package com.nicolasfanin.userapp.ui.fragments.adapters
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.data.model.User
 import com.squareup.picasso.Picasso
@@ -23,7 +23,7 @@ class UserAdapter(private val userList: List<User>, private val listener: (Int) 
 
     override fun getItemCount(): Int = userList.size
 
-    class UserViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
+    inner class UserViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.user_item, parent, false)) {
 
         private var userNameTextView: TextView? = null

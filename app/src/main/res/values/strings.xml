@@ -7,10 +7,13 @@
     <string name="user_details_phone"><![CDATA[<b>Phone: </b> %1$s <br>]]></string>
     <string name="user_details_cell"><![CDATA[<b>Cellular: </b> %1$s <br>]]></string>
     <string name="user_details_user_name"><![CDATA[<b>User name: </b> %1$s <br>]]></string>
-    <string name="user_details_address"><![CDATA[<br><b>Address: </b> <br>]]></string>
+    <string name="user_details_address"><![CDATA[<br><b>Address: </b> <br><br>]]></string>
     <string name="user_details_street"><![CDATA[<b>Street: </b> %1$s <br>]]></string>
     <string name="user_details_city"><![CDATA[<b>City: </b> %1$s <br>]]></string>
     <string name="user_details_state"><![CDATA[<b>State: </b> %1$s <br>]]></string>
     <string name="user_details_post_code"><![CDATA[<b>post Code: </b> %1$s <br>]]></string>
+    <string name="empty_line"> </string>
+    <string name="new_line"><![CDATA[<br>]]></string>
+    <string name="save_user_button">SAVE USER</string>
 
 </resources>

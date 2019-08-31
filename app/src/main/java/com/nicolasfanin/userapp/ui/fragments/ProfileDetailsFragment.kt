@@ -2,29 +2,21 @@ package com.nicolasfanin.userapp.ui.fragments
 
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.nicolasfanin.userapp.R
+import com.nicolasfanin.userapp.data.model.FavouriteUser
 import com.nicolasfanin.userapp.data.model.User
 import com.nicolasfanin.userapp.data.model.UserData
+import com.nicolasfanin.userapp.ui.activities.MainActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile_details.*
-import kotlinx.android.synthetic.main.user_detail_layout.*
 
 
 class ProfileDetailsFragment : Fragment() {
-
-    private var EMPTY = ""
-    private var ERROR_INPUT_EMPTY = "Please fill all fields"
-    private var SAVED = "Saved!"
-    private var myPreferences = "myPrefs"
-    private var NAME = "name"
-    private var PHONE_NUMBER = "phoneNumber"
-    private var EMAIL = "email"
 
     private lateinit var listener: ProfileDetailsListener
     private lateinit var userData: UserData
@@ -50,23 +42,33 @@ class ProfileDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listener = (activity as ProfileDetailsListener)
-        loadData()
-        save_contact_floating_button.setOnClickListener {
+        nestedScroll.isNestedScrollingEnabled = true
+
+        save_favourite_floating_button.setOnClickListener {
+            saveContactAsFavourite()
+        }
+
+        save_contact_button.setOnClickListener {
             listener.addNewContact(userData)
+        }
+
+        updateUi()
+    }
+
+    private fun updateUi() {
+        loadData()
+
+        if (checkIfUserAlreadyExists()) {
+            save_favourite_floating_button.setImageDrawable(resources.getDrawable(R.drawable.baseline_favorite_white_36))
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putSerializable(USER_ARGUMENT, userData)
-    }
-
-    fun loadData() {
+    private fun loadData() {
         Picasso.get()
             .load(userData.user.picture!!.large)
             .into(expandedImage)
 
-        profile_toolbar.title = userData.user.completeUserName
+        profile_toolbar?.title = userData.user.completeUserName
 
         var contentDescription = StringBuilder()
             .append(getString(R.string.user_details_email, userData.user.email))
@@ -78,30 +80,41 @@ class ProfileDetailsFragment : Fragment() {
             .append(getString(R.string.user_details_city, userData.user.location!!.city))
             .append(getString(R.string.user_details_state, userData.user.location!!.state))
             .append(getString(R.string.user_details_post_code, userData.user.location!!.postcode))
+            .append(getString(R.string.new_line))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            content_data.text = Html.fromHtml(
+            content_data_text_view.text = Html.fromHtml(
                 contentDescription.toString(), Html.FROM_HTML_MODE_COMPACT
             )
         } else {
-            content_data.text = Html.fromHtml(contentDescription.toString())
+            content_data_text_view.text = Html.escapeHtml(contentDescription.toString())
         }
     }
 
-    //TODO: Finish this.
     private fun saveContactAsFavourite() {
-        val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
-        editor.putString(
-            NAME,
-            """${userData.user.name!!.title}
-                    |${userData.user.name!!.first}
-                    |${userData.user.name!!.last}""".trimMargin()
-        )
-        editor.putString(PHONE_NUMBER, userData.user.phone)
-        editor.apply()
+        if (checkIfUserAlreadyExists()) {
+            updateUi()
+            return
+        }
+        //Need a wrapper process to be implemented here.
+        val favouriteUser = FavouriteUser(
+            userData.user.login!!.uuid.toString(),
+            userData.user.completeUserName.toString(),
+            userData.user.picture!!.medium.toString())
+
+        (activity as MainActivity).favouriteUserViewModel.insert(favouriteUser)
+
+        save_favourite_floating_button.setImageDrawable(resources.getDrawable(R.drawable.baseline_favorite_white_36))
     }
 
-
+    private fun checkIfUserAlreadyExists(): Boolean {
+        val favouriteUser =
+            (activity as MainActivity).favouriteUserViewModel.getUserById(userData.user.login!!.uuid.toString())
+        if (favouriteUser != null && favouriteUser.userId.equals(userData.user.login!!.uuid.toString())) {
+            return true
+        }
+        return false
+    }
 
     interface ProfileDetailsListener {
 
