@@ -107,6 +107,7 @@ class ProfileSearchFragment : Fragment() {
         }
 
         chargeMoreItemsWhenScrollToEnd(repository, userLinearLayoutManager, isSearching)
+
         if(isSearching) {
             hideFavouriteUserSection()
         } else {
@@ -216,7 +217,7 @@ class ProfileSearchFragment : Fragment() {
             }
         })
 
-        searchView.queryHint = "Search users"
+        searchView.queryHint = getString(R.string.search_users_hint)
 
         searchView.addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
 
@@ -225,7 +226,7 @@ class ProfileSearchFragment : Fragment() {
             }
 
             override fun onViewAttachedToWindow(arg0: View) {
-
+                //no-op
             }
         })
     }

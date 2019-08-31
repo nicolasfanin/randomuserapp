@@ -100,7 +100,7 @@ class ProfileDetailsFragment : Fragment() {
         val favouriteUser = FavouriteUser(
             userData.user.login!!.uuid.toString(),
             userData.user.completeUserName.toString(),
-            userData.user.picture!!.medium.toString())
+            userData.user.picture!!.large.toString())
 
         (activity as MainActivity).favouriteUserViewModel.insert(favouriteUser)
 

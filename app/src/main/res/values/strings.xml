@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Userapp</string>
+    <string name="app_name">UserApp</string>
 
     <string name="user_name">%1$s %2$s</string>
+    <string name="search_users_hint">Search users...</string>
 
     <string name="user_details_email"><![CDATA[<b>Email: </b> %1$s <br>]]></string>
     <string name="user_details_phone"><![CDATA[<b>Phone: </b> %1$s <br>]]></string>

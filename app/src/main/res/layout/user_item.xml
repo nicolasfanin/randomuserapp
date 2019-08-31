@@ -5,6 +5,7 @@
                 android:paddingTop="20dp"
                 android:layout_marginLeft="@dimen/row_padding"
                 android:layout_marginRight="@dimen/row_padding"
+                android:paddingBottom="3dp"
                 xmlns:tools="http://schemas.android.com/tools">
     <ImageView
             android:id="@+id/avatar_view"

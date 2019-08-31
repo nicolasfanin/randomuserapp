@@ -10,10 +10,10 @@ import retrofit2.http.Query
 
 interface RandomUserService {
 
-    @GET("?results=12")
+    @GET("?results=30&nat=us,es,br")
     fun getUsers(): Observable<Result>
 
-    @GET("?results=3")
+    @GET("?results=10&nat=us,es,br")
     fun getPaginationUsers(@Query("page") page: Int, @Query("seed") seed: String): Observable<Result>
 
     companion object Factory {
