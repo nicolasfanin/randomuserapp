@@ -1,6 +1,6 @@
 package com.nicolasfanin.userapp.data.repository
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import androidx.annotation.WorkerThread
 import com.nicolasfanin.userapp.data.dao.FavouriteUserDao
 import com.nicolasfanin.userapp.data.model.FavouriteUser

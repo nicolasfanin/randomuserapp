@@ -2,10 +2,10 @@ package com.nicolasfanin.userapp.ui.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.data.model.User
 import com.nicolasfanin.userapp.data.model.UserData

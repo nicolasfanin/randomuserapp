@@ -1,7 +1,7 @@
-package com.nicolasfanin.userapp.data.ViewModel
+package com.nicolasfanin.userapp.data.viewModel
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.nicolasfanin.userapp.data.managers.FavouriteUserDatabase
