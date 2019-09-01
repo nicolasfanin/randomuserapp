@@ -97,10 +97,27 @@ class ProfileDetailsFragment : Fragment() {
             return
         }
         //Need a wrapper process to be implemented here.
+        var user = userData.user
         val favouriteUser = FavouriteUser(
-            userData.user.login!!.uuid.toString(),
-            userData.user.completeUserName.toString(),
-            userData.user.picture!!.large.toString())
+            user.gender.orEmpty(),
+            user.name!!.title.orEmpty(),
+            user.name!!.first.orEmpty(),
+            user.name!!.last.orEmpty(),
+            user.email.orEmpty(),
+            user.picture!!.large.orEmpty(),
+            user.picture!!.medium.orEmpty(),
+            user.picture!!.thumbnail.orEmpty(),
+            user.login!!.uuid.orEmpty(),
+            user.login!!.username.orEmpty(),
+            user.phone.orEmpty(),
+            user.cell.orEmpty(),
+            user.location!!.street.orEmpty(),
+            user.location!!.city.orEmpty(),
+            user.location!!.state.orEmpty(),
+            user.location!!.postcode.orEmpty(),
+            user.id!!.name.orEmpty(),
+            user.id!!.value.orEmpty(),
+            user.completeUserName.orEmpty())
 
         (activity as MainActivity).favouriteUserViewModel.insert(favouriteUser)
 
@@ -110,7 +127,7 @@ class ProfileDetailsFragment : Fragment() {
     private fun checkIfUserAlreadyExists(): Boolean {
         val favouriteUser =
             (activity as MainActivity).favouriteUserViewModel.getUserById(userData.user.login!!.uuid.toString())
-        if (favouriteUser != null && favouriteUser.userId.equals(userData.user.login!!.uuid.toString())) {
+        if (favouriteUser != null && favouriteUser.loginUuid.equals(userData.user.login!!.uuid.toString())) {
             return true
         }
         return false

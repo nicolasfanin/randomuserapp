@@ -14,8 +14,8 @@ class FavouriteUserRepository(private val favouriteUserDao: FavouriteUserDao) {
         favouriteUserDao.insertUser(favouriteUser)
     }
 
-    fun getUserById(userId: String): FavouriteUser {
-        return favouriteUserDao.getUserById(userId)
+    fun getUserById(loginUuid: String): FavouriteUser {
+        return favouriteUserDao.getUserById(loginUuid)
     }
 
 }
