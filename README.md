@@ -6,6 +6,7 @@ App that connetcs with randmouserapi and shows a list of contacts and details. A
 
 <b>I've used here:</b></br>
 
+&bull; Activities and Fragments</br>
 &bull; Retrofit for networking</br>
 &bull; Room library for persistence</br>
 &bull; Android debug database: https://github.com/amitshekhariitbhu/Android-Debug-Database </br>
