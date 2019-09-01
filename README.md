@@ -22,3 +22,4 @@ App that connetcs with randmouserapi and shows a list of contacts with details. 
 &bull; Navigation components</br>
 
 You can test directly this app downloading the apk: UserAppNicolasFanin.apk ( https://github.com/nicolasfanin/randomuserapp/blob/master/UserAppNicolasFanin.apk )
+
