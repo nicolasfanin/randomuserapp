@@ -55,9 +55,9 @@ data class ServiceInfo(
 
 data class Result(val results: List<User>, val info: ServiceInfo)
 
-class userWrapper(val fUser: FavouriteUser) {
+class UserWrapper(val fUser: FavouriteUser) {
 
-    public fun getUser() : User {
+    fun getUser() : User {
         return User(
             fUser.gender,
             Name(fUser.nameTitle, fUser.nameFirst, fUser.nameLast),
