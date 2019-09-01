@@ -10,13 +10,14 @@
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/search_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/Base.Widget.AppCompat.PopupMenu.Overflow"/>
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -38,6 +39,7 @@
             app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
             android:background="@android:color/darker_gray"
             tools:listitem="@layout/favourite_user_item"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:visibility="gone"
             tools:visibility="visible"/>
 

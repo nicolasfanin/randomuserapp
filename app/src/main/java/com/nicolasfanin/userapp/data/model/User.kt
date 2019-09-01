@@ -17,41 +17,41 @@ data class User(
     @SerializedName("location") val location: Location?,
     @SerializedName("id") val id: Id?,
     var completeUserName: String? = "no complete name"
-)
+) : Serializable
 
 data class Name(
     @SerializedName("title") val title: String? = "no title name",
     @SerializedName("first") val first: String? = "no first name",
     @SerializedName("last") val last: String? = "no last name"
-)
+) : Serializable
 
 data class Picture(
     @SerializedName("large") val large: String? = "no large image",
     @SerializedName("medium") val medium: String? = "no medium image",
     @SerializedName("thumbnail") val thumbnail: String? = "no thumbnail image"
-)
+) : Serializable
 
 data class Login(
     @SerializedName("uuid") val uuid: String? = "no uuid",
     @SerializedName("username") val username: String? = "no username"
-)
+) : Serializable
 
 data class Location(
     @SerializedName("street") val street: String? = "no street",
     @SerializedName("city") val city: String? = "no city",
     @SerializedName("state") val state: String? = "no state",
     @SerializedName("postcode") val postcode: String? = "no postcode"
-)
+) : Serializable
 
 data class Id(
     @SerializedName("name") val name: String? = "no id name",
     @SerializedName("value") val value: String? = "no value"
-)
+) : Serializable
 
 data class ServiceInfo(
     @SerializedName("seed") val seed: String? = "no seed",
     @SerializedName("page") val page: String? = "no page"
-)
+) : Serializable
 
 data class Result(val results: List<User>, val info: ServiceInfo)
 

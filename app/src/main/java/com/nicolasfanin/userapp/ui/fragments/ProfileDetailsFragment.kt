@@ -3,9 +3,7 @@ package com.nicolasfanin.userapp.ui.fragments
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.data.model.FavouriteUser
@@ -91,11 +89,12 @@ class ProfileDetailsFragment : Fragment() {
         }
     }
 
+    //TODO: This should be in the presenter.
     private fun saveContactAsFavourite() {
         if (checkIfUserAlreadyExists()) {
             return
         }
-        //Need a wrapper process to be implemented here.
+        //Need a wrapper process/class to be implemented here.
         var user = userData.user
         val favouriteUser = FavouriteUser(
             user.gender.orEmpty(),
