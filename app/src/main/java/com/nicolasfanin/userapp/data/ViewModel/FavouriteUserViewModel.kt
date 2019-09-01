@@ -28,7 +28,7 @@ class FavouriteUserViewModel(application: Application) : AndroidViewModel(applic
     }
 
     //Wrapper getUserById
-    fun getUserById(userId: String): FavouriteUser {
-        return repository.getUserById(userId)
+    fun getUserById(loginUuid: String): FavouriteUser {
+        return repository.getUserById(loginUuid)
     }
 }
