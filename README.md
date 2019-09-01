@@ -1,11 +1,12 @@
 # randomuserapp
 <b>Random user app</b>
 </br>
-App that connetcs with randmouserapi and shows a list of contacts and details. Also allows save favourite contacts and contacts to be saved on phone.
+App that connetcs with randmouserapi and shows a list of contacts with details. Also allows save favourite contacts and contacts to be saved on phone.
 </br>
 
 <b>I've used here:</b></br>
 
+&bull; Kotlin</br>
 &bull; Activities and Fragments</br>
 &bull; Retrofit for networking</br>
 &bull; Room library for persistence</br>
