@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.data.model.User
@@ -14,7 +13,6 @@ import com.nicolasfanin.userapp.data.model.UserData
 import com.nicolasfanin.userapp.data.viewModel.FavouriteUserViewModel
 import com.nicolasfanin.userapp.ui.fragments.ProfileDetailsFragment
 import com.nicolasfanin.userapp.ui.fragments.ProfileSearchFragment
-
 
 class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchListener,
     ProfileDetailsFragment.ProfileDetailsListener {
