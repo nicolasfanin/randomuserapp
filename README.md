@@ -23,3 +23,4 @@ App that connetcs with randmouserapi and shows a list of contacts with details. 
 
 You can test directly this app downloading the apk: UserAppNicolasFanin.apk ( https://github.com/nicolasfanin/randomuserapp/blob/master/UserAppNicolasFanin.apk )
 
+![demoUserApp](https://user-images.githubusercontent.com/8115182/64083015-e05d3b80-ccee-11e9-90cc-64259d550aa5.gif)
