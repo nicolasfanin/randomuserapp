@@ -1,10 +1,10 @@
 # randomuserapp
-Random user app
+#Random user app
 </br>
 App that connetcs with randmouserapi and shows a list of contacts and details. Also allows save favourite contacts and contacts to be saved on phone.
 </br>
 
-I've used here:</br>
+#I've used here:</br>
 
 &bull; Retrofit for networking</br>
 &bull; Room library for persistence</br>
