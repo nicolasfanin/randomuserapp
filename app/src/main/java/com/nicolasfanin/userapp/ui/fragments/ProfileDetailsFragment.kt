@@ -93,7 +93,6 @@ class ProfileDetailsFragment : Fragment() {
 
     private fun saveContactAsFavourite() {
         if (checkIfUserAlreadyExists()) {
-            updateUi()
             return
         }
         //Need a wrapper process to be implemented here.

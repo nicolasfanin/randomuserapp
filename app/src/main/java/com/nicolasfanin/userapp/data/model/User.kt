@@ -1,5 +1,6 @@
 package com.nicolasfanin.userapp.data.model
 
+import android.util.Log
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -53,3 +54,21 @@ data class ServiceInfo(
 )
 
 data class Result(val results: List<User>, val info: ServiceInfo)
+
+class UserWrapper(val fUser: FavouriteUser) {
+
+    fun getUser() : User {
+        return User(
+            fUser.gender,
+            Name(fUser.nameTitle, fUser.nameFirst, fUser.nameLast),
+            fUser.email,
+            Picture(fUser.pictureLarge, fUser.pictureMedium, fUser.pictureThumbnail),
+            Login(fUser.loginUuid, fUser.loginUserName),
+            fUser.phone,
+            fUser.cell,
+            Location(fUser.locationStreet, fUser.locationCity, fUser.locationState, fUser.locationPostCode),
+            Id(fUser.idName, fUser.idValue),
+            fUser.completedUserName
+        )
+    }
+}

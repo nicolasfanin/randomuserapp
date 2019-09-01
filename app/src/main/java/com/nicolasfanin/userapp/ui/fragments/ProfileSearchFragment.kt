@@ -1,7 +1,6 @@
 package com.nicolasfanin.userapp.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
@@ -21,6 +20,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nicolasfanin.userapp.data.model.ServiceInfo
+import com.nicolasfanin.userapp.data.model.UserWrapper
 import com.nicolasfanin.userapp.data.repository.UserRepository
 import com.nicolasfanin.userapp.ui.fragments.adapters.FavouriteUserAdapter
 
@@ -81,15 +81,21 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private fun updateUi(userList: List<User>, isSearching: Boolean) {
-        //Favourite user section
         favouriteUserRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
             val favouriteUserAdapter = FavouriteUserAdapter(context)
             adapter = favouriteUserAdapter
+
+            val favouriteItemOnClick: (Int) -> Unit = { position ->
+                favouriteUserRecyclerView.adapter!!.notifyDataSetChanged()
+                val favUser = (activity as MainActivity).favouriteUserViewModel.allUsers.value!![position]
+                listener.navigateToProfileDetails(UserWrapper(favUser).getUser())
+            }
+
             (activity as MainActivity).favouriteUserViewModel.allUsers.observe(
                 (activity as MainActivity),
                 Observer { user ->
-                    user?.let { favouriteUserAdapter.setUsers(it) }.also {
+                    user?.let { favouriteUserAdapter.setUsers(it, favouriteItemOnClick) }.also {
                         favouriteUserRecyclerView.visibility =
                             if (shouldShowFavouritesUserSection()) View.VISIBLE else View.GONE
                     }

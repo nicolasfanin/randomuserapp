@@ -16,6 +16,7 @@ class FavouriteUserAdapter internal constructor(context: Context) :
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var favouriteUsersList = emptyList<FavouriteUser>()
+    private lateinit var listener: (Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteUserViewHolder {
         val itemView = inflater.inflate(R.layout.favourite_user_item, parent, false)
@@ -29,12 +30,15 @@ class FavouriteUserAdapter internal constructor(context: Context) :
         Picasso.get()
             .load(currentUser.pictureThumbnail)
             .into(holder.favouriteAvatarView)
+
+        holder.itemView.setOnClickListener { listener(position) }
     }
 
     override fun getItemCount() = favouriteUsersList.size
 
-    internal fun setUsers(favouriteUsersList: List<FavouriteUser>) {
+    internal fun setUsers(favouriteUsersList: List<FavouriteUser>, listener: (Int) -> Unit) {
         this.favouriteUsersList = favouriteUsersList
+        this.listener = listener
         notifyDataSetChanged()
     }
 
