@@ -1,10 +1,10 @@
 # randomuserapp
-#Random user app
+<b>Random user app</b>
 </br>
 App that connetcs with randmouserapi and shows a list of contacts and details. Also allows save favourite contacts and contacts to be saved on phone.
 </br>
 
-#I've used here:</br>
+<b>I've used here:</b></br>
 
 &bull; Retrofit for networking</br>
 &bull; Room library for persistence</br>
@@ -12,3 +12,9 @@ App that connetcs with randmouserapi and shows a list of contacts and details. A
 &bull; LiveData, ViewModel and Repositories for favourite users </br>
 &bull; Coroutines </br>
 &bull; Androidx </br>
+
+<b>Things to improove:</b></br>
+
+&bull; Add MVP for fragments</br>
+&bull; Dagger for presenters</br>
+&bull; Navigation components</br>
