@@ -21,8 +21,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nicolasfanin.userapp.data.model.ServiceInfo
+import com.nicolasfanin.userapp.data.model.UserData
+import com.nicolasfanin.userapp.data.model.userWrapper
 import com.nicolasfanin.userapp.data.repository.UserRepository
 import com.nicolasfanin.userapp.ui.fragments.adapters.FavouriteUserAdapter
+import java.io.Serializable
 
 class ProfileSearchFragment : Fragment() {
 
@@ -81,19 +84,31 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private fun updateUi(userList: List<User>, isSearching: Boolean) {
-        //Favourite user section
         favouriteUserRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
             val favouriteUserAdapter = FavouriteUserAdapter(context)
             adapter = favouriteUserAdapter
+
+            val favouriteItemOnClick: (Int) -> Unit = { position ->
+                favouriteUserRecyclerView.adapter!!.notifyDataSetChanged()
+                val favUser = (activity as MainActivity).favouriteUserViewModel.allUsers.value!!.get(position)
+                listener.navigateToProfileDetails(userWrapper(favUser).getUser())
+            }
+
             (activity as MainActivity).favouriteUserViewModel.allUsers.observe(
                 (activity as MainActivity),
                 Observer { user ->
-                    user?.let { favouriteUserAdapter.setUsers(it) }.also {
+                    user?.let { favouriteUserAdapter.setUsers(it, favouriteItemOnClick) }.also {
                         favouriteUserRecyclerView.visibility =
                             if (shouldShowFavouritesUserSection()) View.VISIBLE else View.GONE
                     }
                 })
+        }
+
+        //Favourite user section
+        val favouriteItemOnClick: (Int) -> Unit = { position ->
+            favouriteUserRecyclerView.adapter!!.notifyDataSetChanged()
+            listener.navigateToProfileDetails(userList[position])
         }
 
         // User List section
