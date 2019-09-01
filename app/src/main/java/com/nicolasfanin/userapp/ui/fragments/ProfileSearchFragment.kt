@@ -1,6 +1,7 @@
 package com.nicolasfanin.userapp.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import com.nicolasfanin.userapp.R
 import com.nicolasfanin.userapp.ui.activities.MainActivity
@@ -11,6 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_profile_search.*
 import android.view.View.OnAttachStateChangeListener
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -190,7 +192,7 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private fun shouldShowFavouritesUserSection(): Boolean {
-        if (favouriteUserRecyclerView.adapter!!.itemCount > 0) return true
+        if (favouriteUserRecyclerView?.adapter!!.itemCount > 0) return true
         return false
     }
 
@@ -206,16 +208,18 @@ class ProfileSearchFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                // This should be made by cursor adapter.
-                var filterList = userList.filter { it.completeUserName!!.contains(newText) }
+                var filterList = userList.filter { it.completeUserName!!.contains(newText, true) }
                 updateUi(if (filterList.isEmpty()) userList else filterList, true)
                 return false
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                var filterList = userList.filter { it.completeUserName!!.contains(query) }
+                var filterList = userList.filter { it.completeUserName!!.contains(query, true) }
 
                 updateUi(if (filterList.isEmpty()) userList else filterList, true)
+                if (filterList.isEmpty()) {
+                    Toast.makeText(context, "No results", Toast.LENGTH_SHORT).show()
+                }
                 return false
             }
         })
@@ -229,7 +233,7 @@ class ProfileSearchFragment : Fragment() {
             }
 
             override fun onViewAttachedToWindow(arg0: View) {
-                //no-op
+                updateUi(userList, true)
             }
         })
     }

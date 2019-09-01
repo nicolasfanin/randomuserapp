@@ -35,7 +35,7 @@ class UserAdapter(private val userList: List<User>, private val listener: (Int) 
         }
 
         fun bind(user: User, itemClickListener:(Int)->Unit) {
-            userNameTextView?.text = """${user.name!!.title} ${user.name!!.first} ${user.name.last}"""
+            userNameTextView?.text = user.completeUserName
             subtitleTextView?.text = user.gender
 
             Picasso.get()
