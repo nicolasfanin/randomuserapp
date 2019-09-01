@@ -13,7 +13,6 @@ import com.nicolasfanin.userapp.ui.activities.MainActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile_details.*
 
-
 class ProfileDetailsFragment : Fragment() {
 
     private lateinit var listener: ProfileDetailsListener
@@ -40,7 +39,7 @@ class ProfileDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listener = (activity as ProfileDetailsListener)
-        nestedScroll.isNestedScrollingEnabled = true
+        nested_scroll_view.isNestedScrollingEnabled = true
 
         save_favourite_floating_button.setOnClickListener {
             saveContactAsFavourite()

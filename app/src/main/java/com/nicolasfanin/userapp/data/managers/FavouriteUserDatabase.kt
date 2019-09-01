@@ -25,9 +25,7 @@ abstract class FavouriteUserDatabase : RoomDatabase() {
                     INSTANCE =
                         Room.databaseBuilder(
                             context.applicationContext,
-                            FavouriteUserDatabase::class.java,
-                            "CarParkDatabase"
-                        )
+                            FavouriteUserDatabase::class.java, "CarParkDatabase")
                             .fallbackToDestructiveMigration()
                             .allowMainThreadQueries()
                             .addMigrations()

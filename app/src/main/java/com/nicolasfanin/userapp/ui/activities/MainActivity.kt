@@ -28,9 +28,7 @@ class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchLis
         initializeComponents()
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileSearchFragment.newInstance(), "profileList")
-                .commit()
+            navigateToSeachFragment()
         }
     }
 
@@ -38,10 +36,16 @@ class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchLis
         favouriteUserViewModel = ViewModelProviders.of(this).get(FavouriteUserViewModel::class.java)
     }
 
+    fun navigateToSeachFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, ProfileSearchFragment.newInstance(), "profileList")
+            .commit()
+    }
+
     override fun navigateToProfileDetails(user: User) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, ProfileDetailsFragment.newInstance(user), "profileDetailsList")
-            .addToBackStack("profileDetailsList")
+            .add(R.id.fragment_container, ProfileDetailsFragment.newInstance(user))
+            .addToBackStack(null)
             .commit()
     }
 
@@ -57,7 +61,6 @@ class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchLis
             .putExtra(ContactsContract.Intents.Insert.NAME, displayName)
             .putExtra(ContactsContract.Intents.Insert.PHONE, phoneNumber)
 
-        //TODO: See why this is not returning correctly.
         startActivityForResult(addContactIntent, 100)
     }
 

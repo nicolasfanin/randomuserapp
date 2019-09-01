@@ -46,7 +46,7 @@ class ProfileSearchFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile_search, container, false)
 
         val searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
-        (activity as AppCompatActivity).setSupportActionBar(searchToolbar)
+        (activity as MainActivity).setSupportActionBar(searchToolbar)
 
         favouriteUserRecyclerView = view.findViewById(R.id.favourite_user_recycler_view)
         userRecyclerView = view.findViewById(R.id.user_recycler_view)
