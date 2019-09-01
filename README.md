@@ -16,3 +16,5 @@ App that connetcs with randmouserapi and shows a list of contacts and details. A
 <b>Things to improove:</b></br>
 
 &bull; Add MVP for fragments</br>
+&bull; Dagger for presenters</br>
+&bull; Navigation components</br>
