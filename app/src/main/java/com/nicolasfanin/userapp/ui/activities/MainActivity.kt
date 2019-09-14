@@ -13,6 +13,7 @@ import com.nicolasfanin.userapp.data.model.UserData
 import com.nicolasfanin.userapp.data.viewModel.FavouriteUserViewModel
 import com.nicolasfanin.userapp.ui.fragments.ProfileDetailsFragment
 import com.nicolasfanin.userapp.ui.fragments.ProfileSearchFragment
+import com.nicolasfanin.userapp.ui.fragments.nameFormat
 
 class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchListener,
     ProfileDetailsFragment.ProfileDetailsListener {
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchLis
 
     //TODO: This should be placed in the ActivityPresenter.
     override fun addNewContact(userData: UserData) {
-        var displayName = """${userData.user.name!!.first} ${userData.user.name!!.last}"""
+        var displayName = "${userData.user.name!!.first} ${userData.user.name!!.last}".nameFormat()
         var phoneNumber = userData.user.phone
 
         var addContactIntent = Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI)

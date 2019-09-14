@@ -12,7 +12,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_profile_search.*
 import android.view.View.OnAttachStateChangeListener
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -23,6 +22,21 @@ import com.nicolasfanin.userapp.data.model.ServiceInfo
 import com.nicolasfanin.userapp.data.model.UserWrapper
 import com.nicolasfanin.userapp.data.repository.UserRepository
 import com.nicolasfanin.userapp.ui.fragments.adapters.FavouriteUserAdapter
+import java.lang.StringBuilder
+
+/**
+ * Add String extension function to format the names.
+ * Adds a capital letter to each
+ */
+fun String.nameFormat() : String {
+    val EMPTY_SPACE = " "
+    val array = this.split(EMPTY_SPACE)
+    val expression = StringBuilder()
+    for (a in array) {
+        expression.append(a.capitalize()).append(EMPTY_SPACE)
+    }
+    return expression.toString()
+}
 
 class ProfileSearchFragment : Fragment() {
 
@@ -170,10 +184,7 @@ class ProfileSearchFragment : Fragment() {
 
     private fun processUserList() {
         for (user: User in userList) {
-            val title = user.name!!.title?.capitalize()
-            val firstName = user.name!!.first?.capitalize()
-            val lastName = user.name!!.last?.capitalize()
-            user.completeUserName = """$title $firstName $lastName"""
+            user.completeUserName = "${user.name!!.title} ${user.name.first} ${user.name.last}".nameFormat()
         }
     }
 
