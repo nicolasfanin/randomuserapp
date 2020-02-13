@@ -17,8 +17,8 @@ App that connetcs with randmouserapi and shows a list of contacts with details. 
 
 <b>Things to improove:</b></br>
 
-&bull; Add MVP for fragments</br>
-&bull; Dagger for presenters</br>
+&bull; Add MVP pattern</br>
+&bull; Add Dagger</br>
 &bull; Navigation components</br>
 
 You can test directly this app downloading the apk: UserAppNicolasFanin.apk ( https://github.com/nicolasfanin/randomuserapp/blob/master/UserAppNicolasFanin.apk )
