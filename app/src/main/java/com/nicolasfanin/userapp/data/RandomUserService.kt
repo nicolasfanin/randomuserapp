@@ -27,5 +27,4 @@ interface RandomUserService {
             return retrofit.create(RandomUserService::class.java)
         }
     }
-
 }

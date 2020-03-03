@@ -62,18 +62,20 @@ class ProfileSearchFragment : Fragment() {
         val searchToolbar = view.findViewById<Toolbar>(R.id.search_toolbar)
         (activity as MainActivity).setSupportActionBar(searchToolbar)
 
+        //Change for new bind
         favouriteUserRecyclerView = view.findViewById(R.id.favourite_user_recycler_view)
         userRecyclerView = view.findViewById(R.id.user_recycler_view)
 
         setHasOptionsMenu(true)
         repository = UserRepositoryProvider.provideUserRepository()
-        loadData()
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listener = (activity as ProfileSearchListener)
+        loadData()
     }
 
     private fun loadData() {
@@ -157,11 +159,9 @@ class ProfileSearchFragment : Fragment() {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             serviceInfo = result.info
-
                             userList = userList + result.results
                             if (userList.isNotEmpty()) {
                                 processUserList()
-
                                 val itemOnClick: (Int) -> Unit = { position ->
                                     userRecyclerView.adapter!!.notifyDataSetChanged()
                                     listener.navigateToProfileDetails(userList[position])

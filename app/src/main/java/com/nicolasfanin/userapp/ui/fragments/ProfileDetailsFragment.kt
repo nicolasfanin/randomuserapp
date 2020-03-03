@@ -114,7 +114,8 @@ class ProfileDetailsFragment : Fragment() {
             user.location!!.postcode.orEmpty(),
             user.id!!.name.orEmpty(),
             user.id!!.value.orEmpty(),
-            user.completeUserName.orEmpty())
+            user.completeUserName.orEmpty()
+        )
 
         (activity as MainActivity).favouriteUserViewModel.insert(favouriteUser)
 

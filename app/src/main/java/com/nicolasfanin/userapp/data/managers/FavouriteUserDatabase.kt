@@ -4,11 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nicolasfanin.userapp.data.dao.FavouriteUserDao
 import com.nicolasfanin.userapp.data.model.FavouriteUser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Database(entities = [FavouriteUser::class], version = 1, exportSchema = false)
 abstract class FavouriteUserDatabase : RoomDatabase() {

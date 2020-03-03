@@ -1,6 +1,5 @@
 package com.nicolasfanin.userapp.data.dao
 
-
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
@@ -19,5 +18,4 @@ interface FavouriteUserDao {
 
     @Query("SELECT * FROM favourite_user WHERE loginUuid == :loginUuid")
     fun getUserById(loginUuid: String): FavouriteUser
-
 }
