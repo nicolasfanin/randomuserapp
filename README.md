@@ -17,7 +17,6 @@ App that connetcs with randmouserapi and shows a list of contacts with details. 
 
 <b>Things to improove:</b></br>
 
-&bull; Add MVP pattern</br>
 &bull; Add Dagger</br>
 &bull; Navigation components</br>
 
