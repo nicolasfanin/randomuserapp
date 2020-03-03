@@ -63,7 +63,6 @@ class ProfileSearchFragment : Fragment() {
     }
 
     private fun loadData() {
-        // This should be placed in a Presenter
         repository.getUsers()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())

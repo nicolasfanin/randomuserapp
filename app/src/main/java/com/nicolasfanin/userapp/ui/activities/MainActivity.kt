@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity(), ProfileSearchFragment.ProfileSearchLis
             .commit()
     }
 
-    //TODO: This should be placed in the ActivityPresenter.
     override fun addNewContact(userData: UserData) {
         var displayName = """${userData.user.name!!.first} ${userData.user.name!!.last}"""
         var phoneNumber = userData.user.phone

@@ -36,10 +36,14 @@ data class Login(
 ) : Serializable
 
 data class Location(
-    @SerializedName("street") val street: String? = "no street",
+    @SerializedName("street") val street: Street?,
     @SerializedName("city") val city: String? = "no city",
     @SerializedName("state") val state: String? = "no state",
     @SerializedName("postcode") val postcode: String? = "no postcode"
+) : Serializable
+
+data class Street(
+    @SerializedName("name") val name: String? = "no street name"
 ) : Serializable
 
 data class Id(
@@ -65,7 +69,7 @@ class UserWrapper(val fUser: FavouriteUser) {
             Login(fUser.loginUuid, fUser.loginUserName),
             fUser.phone,
             fUser.cell,
-            Location(fUser.locationStreet, fUser.locationCity, fUser.locationState, fUser.locationPostCode),
+            Location(Street(fUser.locationStreet), fUser.locationCity, fUser.locationState, fUser.locationPostCode),
             Id(fUser.idName, fUser.idValue),
             fUser.completedUserName
         )

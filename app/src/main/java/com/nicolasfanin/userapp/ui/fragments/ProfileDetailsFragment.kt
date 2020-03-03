@@ -108,7 +108,7 @@ class ProfileDetailsFragment : Fragment() {
             user.login!!.username.orEmpty(),
             user.phone.orEmpty(),
             user.cell.orEmpty(),
-            user.location!!.street.orEmpty(),
+            user.location!!.street!!.name.orEmpty(),
             user.location!!.city.orEmpty(),
             user.location!!.state.orEmpty(),
             user.location!!.postcode.orEmpty(),
